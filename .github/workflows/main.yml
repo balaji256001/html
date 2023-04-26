@@ -1,0 +1,34 @@
+name: Deploy HTML to EC2 Instance
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Copy files to EC2 instance
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        source: "."
+        target: "/tmp/my-html-page"
+
+    - name: Deploy to Apache server on EC2 instance
+      uses: appleboy/ssh-action@master
+      with:
+        host: 54.144.17.44
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        script: |
+          sudo cp -R /tmp/my-html-page/* /var/www/html/
+          sudo chown -R www-data:www-data /var/www/html/
+          sudo systemctl restart apache2
