@@ -25,10 +25,11 @@ jobs:
     - name: Deploy to Apache server on EC2 instance
       uses: appleboy/ssh-action@master
       with:
-        host: 54.144.17.44
-        username: ubuntu
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         script: |
           sudo cp -R /tmp/my-html-page/* /var/www/html/
           sudo chown -R www-data:www-data /var/www/html/
           sudo systemctl restart apache2
+
