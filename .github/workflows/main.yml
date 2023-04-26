@@ -27,7 +27,7 @@ jobs:
       with:
         host: 54.144.17.44
         username: ubuntu
-        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           sudo cp -R /tmp/my-html-page/* /var/www/html/
           sudo chown -R www-data:www-data /var/www/html/
